@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chongwe Riverside — Publisher Records</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3864'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3EJW%3C/text%3E%3C/svg%3E">
+    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3864'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3EJW%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3864'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3EJW%3C/text%3E%3C/svg%3E">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+
+<!-- ══ LOADING OVERLAY ════════════════════════════════════ -->
+<div id="loading-overlay" style="
+  position:fixed;inset:0;background:rgba(31,56,100,0.85);
+  backdrop-filter:blur(4px);z-index:9000;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+">
+  <div style="
+    width:48px;height:48px;border:4px solid rgba(255,255,255,0.2);
+    border-top-color:#C9A84C;border-radius:50%;
+    animation:spin .8s linear infinite;
+  "></div>
+  <div id="loading-msg" style="color:white;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;">
+    Loading congregation records…
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="login-screen">
+  <div class="login-card">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3864'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3EJW%3C/text%3E%3C/svg%3E" alt="Chongwe Riverside congregation logo" class="login-badge" width="64" height="64">
+    <h1 class="login-title">Chongwe Riverside</h1>
+    <p class="login-sub">Congregation Publisher Records</p>
+
+    <noscript>This site needs JavaScript enabled in your browser to work.</noscript>
+
+    <ul class="login-feature-list">
+      <li><strong>Publisher records</strong> — hours, Bible studies, and reports by service year</li>
+      <li><strong>Accounts</strong> — <em>S-24</em> transaction log and <em>S-30</em> monthly report</li>
+      <li><strong>Territories</strong> — assignment tracking with an interactive map</li>
+    </ul>
+
+    <div style="text-align:center">
+      <div class="lang-toggle on-light">
+        <button type="button" data-lang="en" onclick="setAppLanguage('en')">English</button>
+        <button type="button" data-lang="bem" onclick="setAppLanguage('bem')">Cibemba</button>
+      </div>
+    </div>
+
+    <div id="error-msg" class="error-msg">Incorrect name or PIN. Please try again.</div>
+
+    <article id="publisher-login">
+      <label class="field-label">Your Full Name</label>
+      <div class="field-wrap">
+        <select id="pub-name">
+          <option value="">Select name</option>
+        </select>
+      </div>
+      <label class="field-label">Your PIN</label>
+      <div class="field-wrap password-wrap">
+        <input type="password" id="pub-pin" class="pin-input" maxlength="4" placeholder="••••" inputmode="numeric">
+        <button type="button" class="toggle-visibility" aria-label="Show PIN" onclick="togglePasswordField('pub-pin', this)">👁</button>
+      </div>
+      <label class="keep-logged-in-toggle">
+        <input type="checkbox" id="pub-keep" checked> Keep me logged in on this device
+      </label>
+      <button class="btn-login" onclick="doLogin()">View My Record →</button>
+      <div class="secretary-toggle">
+        Are you the secretary? <a onclick="showLoginPanel('secretary')">Secretary login</a>
+        &nbsp;·&nbsp; Are you the accounts servant? <a onclick="showLoginPanel('accounts')">Accounts login</a>
+      </div>
+    </article>
+
+    <article id="secretary-login" style="display:none">
+      <label class="field-label">Secretary Password</label>
+      <div class="field-wrap password-wrap">
+        <input type="password" id="sec-pass" placeholder="Enter password">
+        <button type="button" class="toggle-visibility" aria-label="Show password" onclick="togglePasswordField('sec-pass', this)">👁</button>
+      </div>
+      <label class="keep-logged-in-toggle">
+        <input type="checkbox" id="sec-keep"> Keep me logged in on this device
+      </label>
+      <button class="btn-login" onclick="doSecLogin()">Access All Records →</button>
+      <div class="secretary-toggle">
+        <a onclick="showLoginPanel('publisher')">← Back to publisher login</a>
+      </div>
+    </article>
+
+    <article id="accounts-login" style="display:none">
+      <label class="field-label">Your Full Name</label>
+      <div class="field-wrap">
+        <input type="text" id="acc-name" placeholder="e.g. John Banda">
+      </div>
+      <label class="field-label">Accounts Password</label>
+      <div class="field-wrap password-wrap">
+        <input type="password" id="acc-pass" placeholder="Enter accounts password">
+        <button type="button" class="toggle-visibility" aria-label="Show password" onclick="togglePasswordField('acc-pass', this)">👁</button>
+      </div>
+      <label class="keep-logged-in-toggle">
+        <input type="checkbox" id="acc-keep" checked> Keep me logged in on this device
+      </label>
+      <button class="btn-login" onclick="doAccountsLogin()">Open Accounts →</button>
+      <div class="secretary-toggle">
+        <a onclick="showLoginPanel('publisher')">← Back to publisher login</a>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- ══ APP ═════════════════════════════════════════════ -->
+<div id="app">
+  <header>
+  <nav class="topnav">
+    <div class="nav-brand">Chongwe <span>Riverside</span></div>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button type="button" data-lang="en" onclick="setAppLanguage('en')">EN</button>
+        <button type="button" data-lang="bem" onclick="setAppLanguage('bem')">CIB</button>
+      </div>
+      <div class="nav-user">
+        <div class="nav-avatar" id="nav-avatar">CR</div>
+        <span id="nav-name">Publisher</span>
+      </div>
+      <button class="btn-logout" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+  </header>
+  <main class="main" id="main-content"></main>
+</div>
+
+
+
+<!-- ══ ADMIN PANEL MODAL ══════════════════════════════ -->
+<div id="admin-overlay" class="admin-overlay" style="display:none" onclick="maybeCloseAdmin(event)">
+  <div class="admin-modal" id="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title">⚙️ Admin Panel</div>
+      <button class="admin-modal-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('reports',this)">📋 Enter Reports</button>
+        <button class="admin-tab" onclick="switchAdminTab('add',this)">➕ Add Publisher</button>
+        <button class="admin-tab" onclick="switchAdminTab('edit',this)">✏️ Edit Publisher</button>
+        <button class="admin-tab" onclick="switchAdminTab('pin',this)">🔑 Change PIN</button>
+        <button class="admin-tab" onclick="switchAdminTab('territory',this)">📍 Territories</button>
+        <button class="admin-tab" onclick="switchAdminTab('summary',this)">📊 Summary</button>
+        <button class="admin-tab" onclick="switchAdminTab('serviceyear',this)">🗓️ Service Year</button>
+        <button class="admin-tab" onclick="switchAdminTab('accounts',this)">💰 Accounts</button>
+      </div>
+
+      <!-- TAB: Enter Reports -->
+      <section id="atab-reports" class="admin-tab-pane active">
+        <div class="aform-2col">
+          <div class="aform-row">
+            <label>Select Publisher</label>
+            <select id="rep-pub-select" onchange="loadReportForm()">
+              <option value="">— choose publisher —</option>
+            </select>
+          </div>
+          <div class="aform-row">
+            <label>Service Year</label>
+            <select id="rep-year-select" onchange="loadReportForm()">
+            </select>
+          </div>
+        </div>
+        <div id="rep-form-body"></div>
+      </section>
+
+      <!-- TAB: Add Publisher -->
+      <section id="atab-add" class="admin-tab-pane">
+        <div class="aform-2col">
+          <div class="aform-row">
+            <label>Full Name</label>
+            <input type="text" id="add-name" placeholder="e.g. Jane Mwale">
+          </div>
+          <div class="aform-row">
+            <label>Category</label>
+            <select id="add-cat">
+              <option value="Publisher">Publisher</option>
+              <option value="Auxiliary Pioneer">Auxiliary Pioneer</option>
+              <option value="Regular Pioneer">Regular Pioneer</option>
+              <option value="Special Pioneer">Special Pioneer</option>
+            </select>
+          </div>
+        </div>
+        <div class="aform-2col">
+          <div class="aform-row">
+            <label>Date of Birth</label>
+            <input type="date" id="add-dob">
+          </div>
+          <div class="aform-row">
+            <label>Date of Baptism</label>
+            <input type="date" id="add-baptism">
+          </div>
+        </div>
+        <div class="aform-2col">
+          <div class="aform-row">
+            <label>Sex</label>
+            <div class="s21-check-row">
+              <label><input type="checkbox" id="add-gender-Male"> Male</label>
+              <label><input type="checkbox" id="add-gender-Female"> Female</label>
+            </div>
+          </div>
+          <div class="aform-row">
+            <label>Hope</label>
+            <div class="s21-check-row">
+              <label><input type="checkbox" id="add-sheep-OtherSheep"> Other sheep</label>
+              <label><input type="checkbox" id="add-sheep-Anointed"> Anointed</label>
+            </div>
+          </div>
+        </div>
+        <div class="aform-row">
+          <label>Privileges of Service</label>
+          <div class="s21-check-row s21-check-wrap">
+            <label><input type="checkbox" id="add-role-Elder"> Elder</label>
+            <label><input type="checkbox" id="add-role-MinisterialServant"> Ministerial Servant</label>
+            <label><input type="checkbox" id="add-role-RegularPioneer"> Regular Pioneer</label>
+            <label><input type="checkbox" id="add-role-SpecialPioneer"> Special Pioneer</label>
+            <label><input type="checkbox" id="add-role-FieldMissionary"> Field Missionary</label>
+          </div>
+        </div>
+        <div class="aform-row">
+          <label>PIN (4 digits)</label>
+          <input type="text" id="add-pin" maxlength="4" placeholder="e.g. 1234" style="letter-spacing:.3em;text-align:center;font-size:1.1rem;font-weight:700">
+        </div>
+        <button class="btn-primary" onclick="addPublisher()">✅ Add Publisher</button>
+      </section>
+
+      <!-- TAB: Edit Publisher -->
+      <section id="atab-edit" class="admin-tab-pane">
+        <div class="aform-row edit-pub-select">
+          <label>Select Publisher to Edit</label>
+          <select id="edit-pub-select" onchange="loadEditForm()">
+            <option value="">— choose publisher —</option>
+          </select>
+        </div>
+        <div id="edit-form-body"></div>
+      </section>
+
+      <!-- TAB: Change PIN -->
+      <section id="atab-pin" class="admin-tab-pane">
+        <div class="aform-row">
+          <label>Select Publisher</label>
+          <select id="pin-pub-select">
+            <option value="">— choose publisher —</option>
+          </select>
+        </div>
+        <div class="aform-row">
+          <label>New PIN (4 digits)</label>
+          <input type="text" id="pin-new" maxlength="4" placeholder="e.g. 5678" style="letter-spacing:.3em;text-align:center;font-size:1.1rem;font-weight:700">
+        </div>
+        <button class="btn-primary" onclick="changePin()">🔑 Update PIN</button>
+      </section>
+
+      <!-- TAB: Territory Assignments -->
+      <section id="atab-territory" class="admin-tab-pane">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">
+          Assign or reassign territories to publishers. Changes save immediately.
+        </p>
+        <div class="tr-list-wrap" id="tr-assign-list">
+          Loading…
+        </div>
+      </section>
+
+      <!-- TAB: Summary (Monthly Summary + Active Publishers) -->
+      <section id="atab-summary" class="admin-tab-pane">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">
+          Calculated live from every publisher's monthly record — nothing here is typed in by hand, so it always reflects the latest reports.
+        </p>
+        <div id="summary-content">Loading…</div>
+      </section>
+
+      <!-- TAB: Service Year -->
+      <section id="atab-serviceyear" class="admin-tab-pane">
+        <div id="atab-serviceyear-body">Loading…</div>
+      </section>
+
+      <!-- TAB: Accounts (S-24 / S-30) -->
+      <section id="atab-accounts" class="admin-tab-pane">
+        <div id="atab-accounts-body">Loading…</div>
+      </section>
+    </div>
+  </div>
+</div>
+<div id="admin-toast" class="admin-toast"></div>
+
+<footer style="text-align:center;padding:16px;font-family:'DM Sans',sans-serif">
+  <small>&copy; 2026 Chongwe Riverside Congregation. Built with HTML for a web development assignment.</small>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/i18n.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
