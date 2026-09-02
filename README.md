@@ -97,7 +97,7 @@ app, and the admin panel.
    into the repository through GitHub's web interface.
 
 2. **How many commits did you make and what was your commit message strategy?**
-    It's 2: one for uploading the files, one for editing this README.
+    It's 4: one for uploading the files, and the 3 for editing this README.
 
 3. **Why is version control important for web development projects?**
    Version control keeps a full history of every change, so a mistake can be
