@@ -1,10 +1,9 @@
+
 # HTML Website Development Assignment
 
-Student Name: [Your Name]
-Student ID: [Your ID]
-GitHub Repository: [Your Repository URL]
-
----
+Student Name: Trajan Simfukwe
+Student ID: 2512237271
+GitHub Repository: https://github.com/trajansimz2-rgb/html-website-assignment
 
 ## Question 1: Website Creation
 
@@ -27,13 +26,12 @@ app, and the admin panel.
 ## Question 2: HTML Elements
 
 1. **Which 5 elements did you find most challenging to implement and why?**
-   [Fill in based on your own experience — candidates from this project:
-   `<section>` (deciding which admin-panel tab panes deserved to be sections
-   vs. plain containers), `<article>` (recognizing the three login modes —
-   publisher, secretary, accounts — as self-contained pieces of content),
-   `<form>`/`<input>` combinations with `maxlength`/`inputmode` for the PIN
-   field, `<noscript>` (writing a sensible fallback message for a JS-heavy
-   app), and nested `<div>` structuring for the admin modal's tab system.]
+   As someone new to HTML, the most challenging part wasn't writing tags from
+   scratch but understanding what already existed in the file: `<section>` vs
+   `<article>` (learning the difference between a labelled division of
+   content and a self-contained piece), the `<form>`-related inputs like
+   `maxlength` and `inputmode` on the PIN field, and `<noscript>`, which I
+   hadn't encountered before and had to look up.
 
 2. **How did you use semantic elements to structure your content?**
    `<header>` wraps the top navigation bar; `<nav>` holds the nav links inside
@@ -46,9 +44,10 @@ app, and the admin panel.
    `<footer>` holds the copyright line at the bottom of the page.
 
 3. **Which element was most useful for organizing your layout and why?**
-   [Fill in — likely `<section>`, since splitting the admin panel into eight
-   labelled sections (one per tab) made it easy to show/hide the right one and
-   kept each piece of functionality clearly separated in the markup.]
+   `<section>` — splitting the admin panel into eight separate sections
+   (Reports, Add Publisher, Territories, Accounts, etc.) made it easy to
+   understand which part of the page did what, even without deep coding
+   experience.
 
 ## Question 3: HTML Attributes
 
@@ -69,39 +68,36 @@ app, and the admin panel.
    out the specific one to show.
 
 3. **Which attribute helped improve user experience the most and why?**
-   [Fill in — candidates: `placeholder` on every input, which shows what
-   format is expected (e.g. `placeholder="••••"` on the PIN field) without
-   needing extra label text; or `alt` on the logo image, which keeps the page
-   meaningful even if the image doesn't load; or `inputmode="numeric"` on the
-   PIN field, which brings up a numeric keypad on mobile.]
+   `placeholder`, since it shows what format is expected in a field (like the
+   PIN box showing `••••`) without me needing to read extra instructions.
 
 ## Question 4: Development Process
 
 1. **How did you plan your website structure before coding?**
-   [Fill in with your actual process — e.g. mapped out the three user roles
-   this site needed to support (publisher, secretary, accounts servant) and
-   what each one needed to see, before deciding on the login/app/admin-panel
-   structure.]
+   I started from an existing project I'd been developing and focused on
+   understanding its three main user roles — publisher, secretary, and
+   accounts servant — and how the login and admin panel needed to support
+   each one.
 
 2. **What was your approach to testing and debugging your HTML?**
-   [Fill in — e.g. opened the file directly in a browser after each change,
-   used browser DevTools to inspect the DOM and confirm elements had the
-   right `id`s for JavaScript to find them, and checked the console for
-   errors after every edit.]
+   I opened `index.html` directly in my browser after each change and
+   checked that the page still loaded correctly and nothing looked broken.
 
 3. **What challenges did you face and how did you overcome them?**
-   [Fill in based on your actual experience — e.g. making sure tag renames
-   (like `<div>` → `<section>`) didn't break existing JavaScript, since the
-   app was already functional before the semantic cleanup.]
+   As a beginner, the biggest challenge was understanding HTML/GitHub
+   terminology I hadn't encountered before — things like "repository,"
+   "commit," and "collaborator." I worked through each concept step by step
+   rather than trying to learn everything at once.
 
 ## Question 5: Git & GitHub Implementation
 
 1. **What Git commands did you use during development?**
-   [Fill in — typically: `git init`, `git add .`, `git commit -m "..."`,
-   `git branch -M main`, `git remote add origin <url>`, `git push -u origin main`.]
+   I used GitHub's browser-based file upload rather than the command line,
+   so no terminal Git commands were needed — I dragged my files directly
+   into the repository through GitHub's web interface.
 
 2. **How many commits did you make and what was your commit message strategy?**
-   [Fill in with your actual commit count and habits.]
+    It's probably 2: one for uploading the files, one for editing this README.]
 
 3. **Why is version control important for web development projects?**
    Version control keeps a full history of every change, so a mistake can be
@@ -124,9 +120,9 @@ app, and the admin panel.
    actual role rather than defaulting to `<div>` everywhere.
 
 3. **How would you improve your website if you had more time?**
-   [Fill in — e.g. wrap the login forms in real `<form>` elements with proper
-   submit handling, add more ARIA attributes for accessibility, or add a
-   dedicated settings page.]
+   I'd like to learn enough HTML/CSS to make small style changes myself, and
+   understand the JavaScript well enough to add new features on my own rather
+   than relying on outside help.
 
 ---
 
@@ -136,7 +132,7 @@ app, and the admin panel.
 - [x] 15+ different HTML attributes used (22 used)
 - [x] Semantic HTML structure implemented
 - [x] Website works in a web browser
-- [ ] GitHub repository with all code
+- [x] GitHub repository with all code
 - [x] README.md file with documentation (this file)
 - [ ] Instructor added as collaborator (`instructor-webdev`)
 - [ ] Instructor followed on GitHub
