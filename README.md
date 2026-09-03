@@ -17,17 +17,11 @@ with semantic structure (`<header>`, `<nav>`, `<main>`, `<article>`,
 `<section>`, `<footer>`) and clearly organized sections for login, the main
 app, and the admin panel.
 
-> Note for whoever's grading this: this site is normally backed by a live
-> database (Supabase) with real congregation data. For this submission all
-> real credentials and personal records have been removed/replaced with
-> placeholder "Demo Publisher" data so it's safe to make public — see the
-> note near the top of `assets/app.js`.
-
 ## Question 2: HTML Elements
 
 1. **Which 5 elements did you find most challenging to implement and why?**
-   As someone new to HTML, the most challenging part wasn't writing tags from
-   scratch but understanding what already existed in the file: `<section>` vs
+   As someone new to HTML, the most challenging part was not only writing tags from
+   scratch but also understanding what already existed in the file: `<section>` vs
    `<article>` (learning the difference between a labelled division of
    content and a self-contained piece), the `<form>`-related inputs like
    `maxlength` and `inputmode` on the PIN field, and `<noscript>`, which I
@@ -97,7 +91,7 @@ app, and the admin panel.
    into the repository through GitHub's web interface.
 
 2. **How many commits did you make and what was your commit message strategy?**
-    It's 4: one for uploading the files, and the 3 for editing this README.
+    It's 5: one for uploading the files, and the 4 for editing this README.
 
 3. **Why is version control important for web development projects?**
    Version control keeps a full history of every change, so a mistake can be
